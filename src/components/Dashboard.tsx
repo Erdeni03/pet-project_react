@@ -20,10 +20,13 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import Counter from "../pages/Counter";
 import {ListItem, ListItemIcon, ListItemText} from "@material-ui/core";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import BrushIcon from '@material-ui/icons/Brush';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import {Link as MaterialLink} from "@material-ui/core";
-import {Link, Route, Switch} from 'react-router-dom'
+import {Link, Redirect, Route, Switch} from 'react-router-dom'
 import Posts from "../pages/Posts";
+import Users from "../pages/Users";
+import PaintOnline from "../pages/PaintOnline";
 
 
 
@@ -112,7 +115,7 @@ const useStyles = makeStyles((theme) => ({
 
     },
     paper: {
-        padding: theme.spacing(2),
+
         display: 'flex',
         overflow: 'auto',
         flexDirection: 'column',
@@ -146,7 +149,9 @@ export default function Dashboard() {
                         className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
                     >
                         <MenuIcon />
+
                     </IconButton>
+
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                         Training mini-projects
                     </Typography>
@@ -155,6 +160,7 @@ export default function Dashboard() {
                             <NotificationsIcon />
                         </Badge>
                     </IconButton>
+                {/*    TODO добавить DarkMOde*/}
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -185,9 +191,23 @@ export default function Dashboard() {
                         <ListItemText primary="Посты" />
                     </ListItem>
 
+                    <ListItem button component={Link} to='/users'>
+                        <ListItemIcon>
+                            <ListAltIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary="Пользователи" />
+                    </ListItem>
+
+                    <ListItem button component={Link} to='/paint-online'>
+                        <ListItemIcon>
+                            <BrushIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary="Paint-online" />
+                    </ListItem>
+
                 </List>
                 <Divider />
-                <List>aaaaa</List>
+                {/*<List>aaaaa</List>*/}
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
@@ -203,6 +223,13 @@ export default function Dashboard() {
                                     <Route path='/posts' exact>
                                         <Posts/>
                                     </Route>
+                                    <Route path='/users' exact>
+                                        <Users/>
+                                    </Route>
+                                    <Route path='/paint-online/:id' exact>
+                                        <PaintOnline/>
+                                    </Route>
+                                    <Redirect to={`/paint-online/f${(+new Date).toString(16)}`}/>
                                 </Switch>
 
                             </Paper>
