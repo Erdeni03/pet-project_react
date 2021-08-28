@@ -9,8 +9,9 @@ import Alert from '@material-ui/lab/Alert';
 import AddIcon from '@material-ui/icons/Add';
 import CustomList from "../components/CustomList";
 import PostItem from "../components/PostItem";
-import CustomModal from "../components/CustomModal";
+import CustomModal from "../components/UI/CustomModal";
 import TextField from "@material-ui/core/TextField";
+import {useHistory, useParams} from "react-router-dom";
 
 const useStyles = makeStyles({
     root: {
@@ -40,6 +41,14 @@ const Posts = () => {
     const [search, setSearch] = useState<string>('')
     const [newPost, setNewPost] = useState<{ title: string, body: string }>({title: '', body: ''})
     const [showAlert, setShowAlert] = useState<boolean>(false)
+
+    // const params = useParams()
+    // const history = useHistory()
+    //
+    // useEffect(()=>{
+    //     console.log(params, 'parmas22')
+    //     console.log(history, 'historyhistoryhistory')
+    // }, [])
 
     useEffect(() => {
         fetchPosts().then(resolve => setPosts(resolve.data)).catch(e => alert(e))

@@ -3,7 +3,7 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import {useActions} from "../../hooks/useActions";
 import Brush from "./tools/Brush";
-import CustomModal from "../CustomModal";
+import CustomModal from "../UI/CustomModal";
 import TextField from "@material-ui/core/TextField";
 import {useParams} from "react-router-dom";
 
