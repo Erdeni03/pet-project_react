@@ -1,11 +1,8 @@
 import React from 'react';
+import { Switch } from 'react-router-dom';
 
 const AppRouter = () => {
-    return (
-        <div>
-            
-        </div>
-    );
+  return <Switch></Switch>;
 };
 
 export default AppRouter;
