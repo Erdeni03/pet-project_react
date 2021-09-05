@@ -1,6 +1,6 @@
-import React from 'react';
-import PaintToolbar from '../components/paint_online/PaintToolbar';
-import PaintCanvas from '../components/paint_online/PaintCanvas';
+import React from 'react'
+import PaintToolbar from '../components/paint_online/PaintToolbar'
+import PaintCanvas from '../components/paint_online/PaintCanvas'
 
 const PaintOnline = () => {
   return (
@@ -8,7 +8,7 @@ const PaintOnline = () => {
       <PaintToolbar />
       <PaintCanvas />
     </>
-  );
-};
+  )
+}
 
-export default PaintOnline;
+export default PaintOnline

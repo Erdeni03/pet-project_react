@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Box, Button, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState } from 'react'
+import { Box, Button, Typography } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -14,12 +14,12 @@ const useStyles = makeStyles((theme) => ({
   red: {
     color: 'red',
   },
-}));
+}))
 
 const Counter = () => {
-  const classes = useStyles();
+  const classes = useStyles()
 
-  const [counter, setCounter] = useState<number>(0);
+  const [counter, setCounter] = useState<number>(0)
   return (
     <Box
       display="flex"
@@ -54,7 +54,7 @@ const Counter = () => {
         </Button>
       </div>
     </Box>
-  );
-};
+  )
+}
 
-export default Counter;
+export default Counter

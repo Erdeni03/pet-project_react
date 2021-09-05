@@ -1,8 +1,8 @@
-import React from 'react';
-import { Switch } from 'react-router-dom';
+import React from 'react'
+import { Switch } from 'react-router-dom'
 
 const AppRouter = () => {
-  return <Switch></Switch>;
-};
+  return <Switch></Switch>
+}
 
-export default AppRouter;
+export default AppRouter

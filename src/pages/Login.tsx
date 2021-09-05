@@ -1,40 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import { connect } from 'react-redux';
-import { AuthState } from '../store/reducers/authReducer';
-import { RootState } from '../store/reducers';
-import { disableAuth, setAuth } from '../store/action-creators/auth';
-import firebase from 'firebase/compat/app';
+import React from 'react'
+import Avatar from '@material-ui/core/Avatar'
+import Button from '@material-ui/core/Button'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import TextField from '@material-ui/core/TextField'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Checkbox from '@material-ui/core/Checkbox'
+import MaterialLink from '@material-ui/core/Link'
+import Grid from '@material-ui/core/Grid'
+import Box from '@material-ui/core/Box'
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import Typography from '@material-ui/core/Typography'
+import { makeStyles } from '@material-ui/core/styles'
+import Container from '@material-ui/core/Container'
+import { connect } from 'react-redux'
+
+import { RootState } from '../store/reducers'
+import { disableAuth, setAuth } from '../store/action-creators/auth'
 import {
   getAuth,
   signInWithEmailAndPassword,
   onAuthStateChanged,
-} from 'firebase/auth';
-import CustomAlert from '../components/UI/CustomAlert';
+} from 'firebase/auth'
+import { setAlert } from '../store/action-creators/alert'
+import { useFormik } from 'formik'
+import * as yup from 'yup'
+import { useHistory, Link } from 'react-router-dom'
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
+      <MaterialLink color="inherit" href="https://material-ui.com/">
         Your Website
-      </Link>{' '}
+      </MaterialLink>{' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
-  );
+  )
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -55,62 +57,86 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-}));
+}))
 
 interface HomeProps {
-  id?: number;
+  id?: number
 }
 
-type Props = HomeProps & AuthState & typeof mapDispatchToProps;
-// "prettier/react" "plugin:prettier/recommended",
-const Login = ({ isAuth, setAuth, disableAuth }: Props) => {
-  const classes = useStyles();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isAlert, setIsAlert] = useState(false);
+type Props = HomeProps & LinkProps & typeof mapDispatchToProps
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const auth = getAuth();
-    console.log(auth, 'authauthauthauth');
-    signInWithEmailAndPassword(auth, email, password)
+const Login = ({ setAuth, setAlert }: Props) => {
+  const classes = useStyles()
+  const history = useHistory()
+  const validationSchema = yup.object({
+    email: yup
+      .string()
+      .email('Введите корректный email')
+      .required('Поле email обязательный'),
+    password: yup
+      .string()
+      .min(6, 'Пароль должен состоять минимум из 8 символов')
+      .required('Поле password обязательный'),
+  })
+
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      signInWithFirebase(values)
+    },
+  })
+
+  const signInWithFirebase = (values: { email: string; password: string }) => {
+    const auth = getAuth()
+
+    signInWithEmailAndPassword(auth, values.email, values.password)
       .then((userCredential) => {
-        const user = userCredential;
+        const user = userCredential
 
-        setIsAlert(true);
-        setAuth();
-        console.log(isAlert, 'isAlertisAlertisAlert');
-        // setTimeout(() => {
-        //   setAuth();
-        // }, 1000);
+        setAlert({
+          isOpen: true,
+          text: 'Вход в систему успешно пройден!!',
+          variant: 'success',
+        })
 
-        console.log(user, 'user');
+        setAuth()
+        history.push('/')
+        console.log(user, 'user')
       })
       .catch((error) => {
+        console.log(error)
+
         if (error.code === 'auth/user-not-found') {
-          setIsAlert(true);
+          setAlert({
+            isOpen: true,
+            text: 'Такого пользователя не существует!',
+            variant: 'error',
+          })
           // disableAuth();
+        } else if (error.code === 'auth/wrong-password') {
+          setAlert({
+            isOpen: true,
+            text: 'Введен неверный пароль. Повторите попытку.',
+            variant: 'error',
+          })
         }
-      });
+      })
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log(user, 'useruseruseruseruseruseruseruseruseruser2');
-        const uid = user.uid;
-
-        console.log(uid, 'uiduiduiduiduiduiduid');
+        console.log(user, 'useruseruseruseruseruseruseruseruseruser2')
       }
-    });
-  };
-  //
-  useEffect(() => {
-    console.log(isAuth, 'isAuth33333333333');
-  }, [isAuth]);
+    })
+  }
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <CustomAlert isOpen={isAlert} text={'xyevo'} />
+
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
@@ -118,20 +144,25 @@ const Login = ({ isAuth, setAuth, disableAuth }: Props) => {
         <Typography component="h1" variant="h5">
           Вход в систему
         </Typography>
-        <form onSubmit={handleSubmit} className={classes.form} noValidate>
+        <form
+          onSubmit={formik.handleSubmit}
+          className={classes.form}
+          noValidate
+        >
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
+            label="Email"
             id="email"
-            label="Почтовый ящик"
             name="email"
             autoComplete="email"
             autoFocus
-            error
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
+            value={formik.values.email}
+            onChange={formik.handleChange}
           />
           <TextField
             variant="outlined"
@@ -139,12 +170,14 @@ const Login = ({ isAuth, setAuth, disableAuth }: Props) => {
             required
             fullWidth
             name="password"
-            label="Пароль"
+            label="Password"
             type="password"
             id="password"
             autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -161,12 +194,12 @@ const Login = ({ isAuth, setAuth, disableAuth }: Props) => {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <MaterialLink href="#" variant="body2">
                 Забыл пароль?
-              </Link>
+              </MaterialLink>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link to={'/registration'}>
                 {'Нет аккаунта? Зарегистрируйся'}
               </Link>
             </Grid>
@@ -177,18 +210,25 @@ const Login = ({ isAuth, setAuth, disableAuth }: Props) => {
         <Copyright />
       </Box>
     </Container>
-  );
-};
+  )
+}
+
 // ownProps: HomeProps
-const mapStateToProps = (state: RootState): AuthState => {
+
+interface LinkProps {
+  isAuth: boolean | null
+}
+
+const mapStateToProps = (state: RootState): LinkProps => {
   return {
     isAuth: state.auth.isAuth,
-  };
-};
+  }
+}
 
 const mapDispatchToProps = {
   setAuth,
   disableAuth,
-};
+  setAlert,
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

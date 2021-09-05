@@ -1,21 +1,21 @@
 interface SetToolAction {
-  type: ToolActionTypes.SET_TOOL;
-  payload: string;
+  type: ToolActionTypes.SET_TOOL
+  payload: string
 }
 
 interface SetFillColor {
-  type: ToolActionTypes.SET_FILLCOLOR;
-  payload: string;
+  type: ToolActionTypes.SET_FILLCOLOR
+  payload: string
 }
 
 interface SetLineWidth {
-  type: ToolActionTypes.SET_LINEWIDTH;
-  payload: number;
+  type: ToolActionTypes.SET_LINEWIDTH
+  payload: number
 }
 
 interface SetStrokeColor {
-  type: ToolActionTypes.SET_STROKECOLOR;
-  payload: number;
+  type: ToolActionTypes.SET_STROKECOLOR
+  payload: number
 }
 
 // interface FetchUsersErrorAction {
@@ -26,10 +26,10 @@ export type ToolAction =
   | SetToolAction
   | SetFillColor
   | SetLineWidth
-  | SetStrokeColor;
+  | SetStrokeColor
 
 interface ToolState {
-  tool: any;
+  tool: any
 }
 
 export enum ToolActionTypes {
@@ -41,7 +41,7 @@ export enum ToolActionTypes {
 
 const initialState: ToolState = {
   tool: null,
-};
+}
 
 export const paintToolReducer = (
   state = initialState,
@@ -49,19 +49,19 @@ export const paintToolReducer = (
 ): ToolState => {
   switch (action.type) {
     case ToolActionTypes.SET_TOOL:
-      return { tool: action.payload };
+      return { tool: action.payload }
     case ToolActionTypes.SET_FILLCOLOR:
-      state.tool.ctx.fillStyle = action.payload;
-      return { tool: state.tool };
+      state.tool.ctx.fillStyle = action.payload
+      return { tool: state.tool }
     case ToolActionTypes.SET_STROKECOLOR:
-      state.tool.ctx.strokeStyle = action.payload;
-      return { tool: state.tool };
+      state.tool.ctx.strokeStyle = action.payload
+      return { tool: state.tool }
     case ToolActionTypes.SET_LINEWIDTH:
-      state.tool.ctx.lineWidth = action.payload;
+      state.tool.ctx.lineWidth = action.payload
       return {
         tool: state.tool,
-      };
+      }
     default:
-      return state;
+      return state
   }
-};
+}

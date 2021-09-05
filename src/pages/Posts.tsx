@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import { getPosts } from '../api/posts';
-import { IPosts } from '../types/types';
+import React, { useEffect, useState } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button'
+import { getPosts } from '../api/posts'
+import { IPosts } from '../types/types'
 import {
   Box,
   FormControl,
@@ -10,14 +10,14 @@ import {
   InputAdornment,
   InputLabel,
   Snackbar,
-} from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
-import Alert from '@material-ui/lab/Alert';
-import AddIcon from '@material-ui/icons/Add';
-import CustomList from '../components/CustomList';
-import PostItem from '../components/PostItem';
-import CustomModal from '../components/UI/CustomModal';
-import TextField from '@material-ui/core/TextField';
+} from '@material-ui/core'
+import SearchIcon from '@material-ui/icons/Search'
+import Alert from '@material-ui/lab/Alert'
+import AddIcon from '@material-ui/icons/Add'
+import CustomList from '../components/CustomList'
+import PostItem from '../components/PostItem'
+import CustomModal from '../components/UI/CustomModal'
+import TextField from '@material-ui/core/TextField'
 
 const useStyles = makeStyles({
   root: {
@@ -37,52 +37,52 @@ const useStyles = makeStyles({
     fontSize: 14,
     marginBottom: 12,
   },
-});
+})
 
 const Posts = () => {
-  const [posts, setPosts] = useState<IPosts[]>([]);
-  const [search, setSearch] = useState<string>('');
+  const [posts, setPosts] = useState<IPosts[]>([])
+  const [search, setSearch] = useState<string>('')
   const [newPost, setNewPost] = useState<{ title: string; body: string }>({
     title: '',
     body: '',
-  });
-  const [showAlert, setShowAlert] = useState<boolean>(false);
+  })
+  const [showAlert, setShowAlert] = useState<boolean>(false)
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     fetchPosts()
       .then((resolve) => setPosts(resolve.data))
-      .catch((e) => alert(e));
-  }, []);
+      .catch((e) => alert(e))
+  }, [])
 
   async function fetchPosts() {
     return await getPosts(
       'https://jsonplaceholder.typicode.com/posts?_limit=10'
-    );
+    )
   }
 
   const removeItem = (id: number) => {
-    setPosts(posts.filter((item) => item.id !== id));
-  };
+    setPosts(posts.filter((item) => item.id !== id))
+  }
   const filteredPosts = posts.filter((post) =>
     post.title.toLowerCase().includes(search.toLowerCase())
-  );
+  )
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false)
 
   const createPost = () => {
     const addCreatePost = {
       ...newPost,
       id: Date.now(),
-    };
-    setPosts([...posts, addCreatePost]);
-    setShowAlert(true);
-    setNewPost({ title: '', body: '' });
-    setOpen(false);
-    setTimeout(() => setShowAlert(false), 1500);
-  };
+    }
+    setPosts([...posts, addCreatePost])
+    setShowAlert(true)
+    setNewPost({ title: '', body: '' })
+    setOpen(false)
+    setTimeout(() => setShowAlert(false), 1500)
+  }
 
-  const classes = useStyles();
+  const classes = useStyles()
   return (
     <div className={classes.root}>
       <Snackbar
@@ -157,7 +157,7 @@ const Posts = () => {
         />
       </Box>
     </div>
-  );
-};
+  )
+}
 
-export default Posts;
+export default Posts

@@ -30,7 +30,7 @@
     "rules": {
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "no-use-before-define": "off",
-        "@typescript-eslint/no-use-before-define": ["error"],
+        "@typescript-eslint/no-use-before-define": "off",
         "no-unused-vars": "off",
         "require-jsdoc": "off",
         "react/react-in-jsx-scope": "off",
@@ -39,6 +39,8 @@
         "@typescript-eslint/ban-types": "off",
         "react/jsx-uses-vars": "error",
         "react/jsx-uses-react": "error",
-        "accessor-pairs": "off"
+        "accessor-pairs": "off",
+        "semi": ["error", "never"],
+        "prettier/prettier": "off"
     }
 }

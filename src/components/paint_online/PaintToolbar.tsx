@@ -1,23 +1,23 @@
-import React from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import SaveIcon from '@material-ui/icons/Save';
-import SubdirectoryArrowLeftIcon from '@material-ui/icons/SubdirectoryArrowLeft';
-import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
-import CheckBoxOutlineBlankSharpIcon from '@material-ui/icons/CheckBoxOutlineBlankSharp';
-import RadioButtonUncheckedSharpIcon from '@material-ui/icons/RadioButtonUncheckedSharp';
-import LinearScaleIcon from '@material-ui/icons/LinearScale';
-import BrushIcon from '@material-ui/icons/Brush';
-import FormatPaintSharpIcon from '@material-ui/icons/FormatPaintSharp';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
-import { useActions } from '../../hooks/useActions';
-import Brush from './tools/Brush';
-import Rect from './tools/Rect';
-import Circle from './tools/Circle';
-import Eraser from './tools/Eraser';
-import Line from './tools/Line';
+import React from 'react'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import IconButton from '@material-ui/core/IconButton'
+import SaveIcon from '@material-ui/icons/Save'
+import SubdirectoryArrowLeftIcon from '@material-ui/icons/SubdirectoryArrowLeft'
+import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight'
+import CheckBoxOutlineBlankSharpIcon from '@material-ui/icons/CheckBoxOutlineBlankSharp'
+import RadioButtonUncheckedSharpIcon from '@material-ui/icons/RadioButtonUncheckedSharp'
+import LinearScaleIcon from '@material-ui/icons/LinearScale'
+import BrushIcon from '@material-ui/icons/Brush'
+import FormatPaintSharpIcon from '@material-ui/icons/FormatPaintSharp'
+import { useTypedSelector } from '../../hooks/useTypedSelector'
+import { useActions } from '../../hooks/useActions'
+import Brush from './tools/Brush'
+import Rect from './tools/Rect'
+import Circle from './tools/Circle'
+import Eraser from './tools/Eraser'
+import Line from './tools/Line'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,21 +44,21 @@ const useStyles = makeStyles((theme: Theme) =>
       width: 100,
     },
   })
-);
+)
 
 export default function PaintToolbar() {
-  const classes = useStyles();
+  const classes = useStyles()
 
   const { canvas, sessionId, socket } = useTypedSelector(
     (state) => state.paintCanvas
-  );
+  )
   const { setTool, setLineWidth, setFillColor, setStrokeColor, undo, redo } =
-    useActions();
+    useActions()
 
   const changeColor = (e: any) => {
-    setStrokeColor(e.target.value);
-    setFillColor(e.target.value);
-  };
+    setStrokeColor(e.target.value)
+    setFillColor(e.target.value)
+  }
   return (
     <div className={classes.root}>
       <AppBar position="static" className={classes.bg}>
@@ -148,5 +148,5 @@ export default function PaintToolbar() {
         </Toolbar>
       </AppBar>
     </div>
-  );
+  )
 }

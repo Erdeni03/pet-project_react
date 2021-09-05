@@ -1,33 +1,52 @@
-import React, { useEffect, useState } from 'react';
-import { Snackbar } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
+import React from 'react'
+import { Snackbar } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
+import { connect } from 'react-redux'
+import { RootState } from '../../store/reducers'
+import { Color } from '../../store/reducers/alertReducer'
+import { hideAlert } from '../../store/action-creators/alert'
 
-interface IProps {
-  isOpen: boolean;
-  text: string;
+interface HomeProps {
+  isOpen: boolean
+  text: string
+  variant: Color | undefined
+  autoHideTime?: number
 }
 
-const CustomAlert = ({ isOpen, text }: IProps) => {
-  const [open, setOpen] = useState(false);
-  useEffect(() => {
-    if (isOpen) {
-      setOpen(isOpen);
-    }
-  }, [isOpen]);
+type Props = HomeProps & typeof mapDispathToProps
+
+const CustomAlert = ({
+  isOpen,
+  text,
+  variant,
+  autoHideTime,
+  hideAlert,
+}: Props) => {
   return (
     <Snackbar
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      autoHideDuration={6000}
-      open={open}
-      onClose={() => setOpen(false)}
-      message={text}
+      autoHideDuration={autoHideTime}
+      open={isOpen}
+      onClose={() => hideAlert()}
       key={'top' + 'right'}
     >
-      <Alert onClose={() => setOpen(false)} severity="success">
+      <Alert onClose={() => hideAlert()} severity={variant}>
         {text}
       </Alert>
     </Snackbar>
-  );
-};
+  )
+}
 
-export default CustomAlert;
+const mapStateToProps = (state: RootState) => {
+  return {
+    isOpen: state.alert.isOpen,
+    text: state.alert.text,
+    variant: state.alert.variant,
+    autoHideTime: state.alert.autoHideTime,
+  }
+}
+
+const mapDispathToProps = {
+  hideAlert,
+}
+export default connect(mapStateToProps, mapDispathToProps)(CustomAlert)

@@ -1,14 +1,15 @@
-import React from 'react';
-import Counter from '../pages/Counter';
-import Posts from '../pages/Posts';
-import Users from '../pages/Users';
-import PaintOnline from '../pages/PaintOnline';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import ListAltIcon from '@material-ui/icons/ListAlt';
-import BrushIcon from '@material-ui/icons/Brush';
-import Login from '../pages/Login';
-import Registration from '../pages/Registration';
-import Home from '../pages/Home';
+import React from 'react'
+import Counter from '../pages/Counter'
+import Posts from '../pages/Posts'
+import Users from '../pages/Users'
+import PaintOnline from '../pages/PaintOnline'
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
+import ListAltIcon from '@material-ui/icons/ListAlt'
+import BrushIcon from '@material-ui/icons/Brush'
+// eslint-disable-next-line import/namespace
+import Login from '../pages/Login'
+import Registration from '../pages/Registration'
+import Home from '../pages/Home'
 
 export const dashBoardRoutes = [
   {
@@ -18,6 +19,7 @@ export const dashBoardRoutes = [
     component: <Home />,
     visibility: false,
   },
+
   {
     url: '/counter',
     label: 'Счетчик',
@@ -46,9 +48,9 @@ export const dashBoardRoutes = [
     component: <PaintOnline />,
     visibility: true,
   },
-];
+]
 
 export const authRoutes = [
   { url: '/login', component: <Login /> },
   { url: '/registration', component: <Registration /> },
-];
+]

@@ -1,35 +1,52 @@
-import { useEffect, useState } from 'react';
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
-import Box from '@material-ui/core/Box';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import MenuIcon from '@material-ui/icons/Menu';
-import Brightness4Icon from '@material-ui/icons/Brightness4';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+import React, { useEffect, useState } from 'react'
+import clsx from 'clsx'
+import { makeStyles } from '@material-ui/core/styles'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import Drawer from '@material-ui/core/Drawer'
+import Box from '@material-ui/core/Box'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import List from '@material-ui/core/List'
+import Typography from '@material-ui/core/Typography'
+import Divider from '@material-ui/core/Divider'
+import IconButton from '@material-ui/core/IconButton'
+import Badge from '@material-ui/core/Badge'
+import Container from '@material-ui/core/Container'
+import Grid from '@material-ui/core/Grid'
+import Paper from '@material-ui/core/Paper'
+import MenuIcon from '@material-ui/icons/Menu'
+import Brightness4Icon from '@material-ui/icons/Brightness4'
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
+import HomeIcon from '@material-ui/icons/Home'
+import NotificationsIcon from '@material-ui/icons/Notifications'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import PersonIcon from '@material-ui/icons/Person'
 
 import {
   ListItem,
   ListItemIcon,
   ListItemText,
   Link as MaterialLink,
-} from '@material-ui/core';
-import { Link, Route, Switch, useHistory, NavLink } from 'react-router-dom';
-import { dashBoardRoutes } from './routes';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+  Avatar,
+} from '@material-ui/core'
+import {
+  Link,
+  Route,
+  Switch,
+  useHistory,
+  NavLink,
+  Redirect,
+  useLocation,
+} from 'react-router-dom'
+import { dashBoardRoutes } from '../routes'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
-import './App.css';
+import '../App.css'
+import { getAuth, signOut } from 'firebase/auth'
+import { setAlert } from '../store/action-creators/alert'
+import NotFound from '../pages/NotFound'
+import { useActions } from '../hooks/useActions'
+import { useTypedSelector } from '../hooks/useTypedSelector'
 
 function Copyright() {
   return (
@@ -41,10 +58,10 @@ function Copyright() {
       {new Date().getFullYear()}
       {'.'}
     </Typography>
-  );
+  )
 }
 
-const drawerWidth = 240;
+const drawerWidth = 240
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -126,29 +143,58 @@ const useStyles = makeStyles((theme) => ({
   page: {
     position: 'absolute',
   },
-}));
+}))
 
 export default function Main() {
-  const classes = useStyles();
-  const [open, setOpen] = useState<boolean>(false);
-  const [label, setLabel] = useState<string>('');
-  const history = useHistory();
+  const classes = useStyles()
+  const [open, setOpen] = useState<boolean>(true)
+  const [label, setLabel] = useState<string>('')
+  const history = useHistory()
+  const location = useLocation()
+  const { setAlert } = useActions()
+  const { currentUser } = useTypedSelector((state) => state.auth)
+  console.log(location, 'locationlocationlocation')
+  console.log(history, 'historyhistoryhistoryhistory')
 
   useEffect(() => {
     dashBoardRoutes.forEach((route) => {
       if (history.location.pathname === route.url) {
-        setLabel(route.label);
+        setLabel(route.label)
       }
-    });
-  });
+    })
+  })
 
   const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+    setOpen(true)
+  }
   const handleDrawerClose = () => {
-    setOpen(false);
-  };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+    setOpen(false)
+  }
+
+  const handleLogout = () => {
+    const auth = getAuth()
+    signOut(auth)
+      .then(() => {
+        console.log('sdsdsd')
+        setAlert({
+          isOpen: true,
+          text: 'Bye bye!!',
+          variant: 'success',
+        })
+        history.push('/login')
+        // Sign-out successful.
+      })
+      .catch((error) => {
+        setAlert({
+          isOpen: true,
+          text: error.message,
+          variant: 'error',
+        })
+        // An error happened.
+      })
+  }
+
+  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
 
   return (
     <div className={classes.root}>
@@ -178,7 +224,14 @@ export default function Main() {
             className={classes.title}
           >
             <NavLink to="/" style={{ textDecoration: 'none', color: 'white' }}>
-              Skill Up
+              <HomeIcon
+                fontSize={'large'}
+                style={{
+                  fontSize: '2.7rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              />
             </NavLink>
           </Typography>
           <Typography
@@ -195,8 +248,30 @@ export default function Main() {
               <NotificationsIcon />
             </Badge>
           </IconButton>
+
           <IconButton color="inherit">
             <Brightness4Icon />
+          </IconButton>
+          <Divider
+            orientation={'vertical'}
+            flexItem={true}
+            style={{ width: 1, background: 'white' }}
+          />
+          <IconButton color="inherit" style={{ marginLeft: 10 }}>
+            {currentUser?.displayName}
+            <Avatar alt="User" style={{ marginLeft: 5 }}>
+              {/* {currentUser?.photoUrl} */}
+              <PersonIcon fontSize={'large'} />
+            </Avatar>
+          </IconButton>
+          <Divider
+            orientation={'vertical'}
+            flexItem={true}
+            style={{ width: 1, background: 'white' }}
+          />
+          <IconButton onClick={handleLogout} color="inherit">
+            Выйти
+            <ExitToAppIcon style={{ marginLeft: 10 }} />
           </IconButton>
           {/*    TODO добавить DarkMOde */}
         </Toolbar>
@@ -228,7 +303,7 @@ export default function Main() {
                   <ListItemText primary={route.label} />
                 </ListItem>
               )
-            );
+            )
           })}
         </List>
         <Divider />
@@ -240,11 +315,16 @@ export default function Main() {
           <Grid container spacing={3}>
             {/* Chart */}
             <Grid item xs={12} md={12} lg={12}>
-              <Paper className={fixedHeightPaper}>
-                <TransitionGroup component={Switch}>
+              {/* <Paper className={fixedHeightPaper}> */}
+              <TransitionGroup className={fixedHeightPaper} component={Paper}>
+                <Switch>
                   {dashBoardRoutes.map((route) => {
                     return (
-                      <Route key={route.url} path={route.url} exact>
+                      <Route
+                        key={route.url}
+                        path={route.url ? route.url : undefined}
+                        exact
+                      >
                         {({ match }) => (
                           <CSSTransition
                             key={route.url}
@@ -257,12 +337,17 @@ export default function Main() {
                           </CSSTransition>
                         )}
                       </Route>
-                    );
+                    )
                   })}
-                </TransitionGroup>
+                  <Route component={NotFound} />
+                  <Redirect to={'/'} />
+                </Switch>
+              </TransitionGroup>
 
-                {/* <Redirect to={`/paint-online/f${(+new Date).toString(16)}`}/> */}
-              </Paper>
+              {/* <Redirect to={history.location.pathname} /> */}
+
+              {/* <Redirect to={`/paint-online/f${(+new Date).toString(16)}`}/> */}
+              {/* </Paper> */}
             </Grid>
             {/* Recent Deposits */}
             {/*                        <Grid item xs={12} md={4} lg={3}> */}
@@ -283,5 +368,5 @@ export default function Main() {
         </Container>
       </main>
     </div>
-  );
+  )
 }

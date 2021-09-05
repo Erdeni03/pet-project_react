@@ -1,44 +1,44 @@
 interface SetCanvasAction {
-  type: CanvasActionTypes.SET_CANVAS;
-  payload: string;
+  type: CanvasActionTypes.SET_CANVAS
+  payload: string
 }
 
 interface SetSocket {
-  type: CanvasActionTypes.SET_SOCKET;
-  payload: WebSocket;
+  type: CanvasActionTypes.SET_SOCKET
+  payload: WebSocket
 }
 
 interface SetSessionId {
-  type: CanvasActionTypes.SET_SESSIONID;
-  payload: string;
+  type: CanvasActionTypes.SET_SESSIONID
+  payload: string
 }
 
 interface SetCtxAction {
-  type: CanvasActionTypes.SET_CTX;
-  payload: any;
+  type: CanvasActionTypes.SET_CTX
+  payload: any
 }
 
 interface UndoListAction {
-  type: CanvasActionTypes.SET_UNDOLIST;
-  payload: string[];
+  type: CanvasActionTypes.SET_UNDOLIST
+  payload: string[]
 }
 
 interface RedoListAction {
-  type: CanvasActionTypes.SET_REDOLIST;
-  payload: any[];
+  type: CanvasActionTypes.SET_REDOLIST
+  payload: any[]
 }
 
 interface UndoHandler {
-  type: CanvasActionTypes.UNDO;
+  type: CanvasActionTypes.UNDO
 }
 
 interface RedoHandler {
-  type: CanvasActionTypes.REDO;
+  type: CanvasActionTypes.REDO
 }
 
 interface SetUserName {
-  type: CanvasActionTypes.SET_USERNAME;
-  payload: string;
+  type: CanvasActionTypes.SET_USERNAME
+  payload: string
 }
 
 export type CanvasAction =
@@ -50,16 +50,16 @@ export type CanvasAction =
   | RedoHandler
   | SetUserName
   | SetSocket
-  | SetSessionId;
+  | SetSessionId
 
 interface CanvasState {
-  canvas: any;
-  ctx: any;
-  undoList: any[];
-  redoList: any[];
-  userName: string;
-  sessionId: null | string;
-  socket: null | WebSocket;
+  canvas: any
+  ctx: any
+  undoList: any[]
+  redoList: any[]
+  userName: string
+  sessionId: null | string
+  socket: null | WebSocket
 }
 
 export enum CanvasActionTypes {
@@ -82,7 +82,7 @@ const initialState: CanvasState = {
   userName: '',
   sessionId: null,
   socket: null,
-};
+}
 
 export const paintCanvasReducer = (
   state = initialState,
@@ -93,51 +93,51 @@ export const paintCanvasReducer = (
       return {
         ...state,
         canvas: action.payload,
-      };
+      }
     case CanvasActionTypes.SET_SOCKET:
       return {
         ...state,
         socket: action.payload,
-      };
+      }
     case CanvasActionTypes.SET_SESSIONID:
       return {
         ...state,
         sessionId: action.payload,
-      };
+      }
     case CanvasActionTypes.SET_CTX:
       return {
         ...state,
         ctx: action.payload,
-      };
+      }
     case CanvasActionTypes.SET_UNDOLIST:
       return {
         ...state,
         undoList: [...state.undoList, action.payload],
-      };
+      }
     case CanvasActionTypes.SET_USERNAME:
       return {
         ...state,
         userName: action.payload,
-      };
+      }
     case CanvasActionTypes.SET_REDOLIST:
       return {
         ...state,
         redoList: action.payload,
-      };
+      }
     case CanvasActionTypes.UNDO:
       // eslint-disable-next-line no-case-declarations
-      const ctx = state.canvas.getContext('2d');
+      const ctx = state.canvas.getContext('2d')
       if (state.undoList.length > 0) {
-        const dataUrl = state.undoList.pop();
-        state.redoList.push(state.canvas.toDataURL());
-        const img = new Image();
-        img.src = dataUrl;
+        const dataUrl = state.undoList.pop()
+        state.redoList.push(state.canvas.toDataURL())
+        const img = new Image()
+        img.src = dataUrl
         img.onload = () => {
-          ctx.clearRect(0, 0, state.canvas.width, state.canvas.height);
-          ctx.drawImage(img, 0, 0, state.canvas.width, state.canvas.height);
-        };
+          ctx.clearRect(0, 0, state.canvas.width, state.canvas.height)
+          ctx.drawImage(img, 0, 0, state.canvas.width, state.canvas.height)
+        }
       } else {
-        ctx.clearRect(0, 0, state.canvas.width, state.canvas.height);
+        ctx.clearRect(0, 0, state.canvas.width, state.canvas.height)
       }
 
       return {
@@ -145,19 +145,19 @@ export const paintCanvasReducer = (
         undoList: state.undoList,
         canvas: state.canvas,
         redoList: state.redoList,
-      };
+      }
     case CanvasActionTypes.REDO:
       // eslint-disable-next-line no-case-declarations
-      const ctx2 = state.canvas.getContext('2d');
+      const ctx2 = state.canvas.getContext('2d')
       if (state.redoList.length > 0) {
-        const dataUrl2 = state.redoList.pop();
-        state.undoList.push(state.canvas.toDataURL());
-        const img = new Image();
-        img.src = dataUrl2;
+        const dataUrl2 = state.redoList.pop()
+        state.undoList.push(state.canvas.toDataURL())
+        const img = new Image()
+        img.src = dataUrl2
         img.onload = () => {
-          ctx2.clearRect(0, 0, state.canvas.width, state.canvas.height);
-          ctx2.drawImage(img, 0, 0, state.canvas.width, state.canvas.height);
-        };
+          ctx2.clearRect(0, 0, state.canvas.width, state.canvas.height)
+          ctx2.drawImage(img, 0, 0, state.canvas.width, state.canvas.height)
+        }
       }
 
       return {
@@ -165,8 +165,8 @@ export const paintCanvasReducer = (
         undoList: state.undoList,
         canvas: state.canvas,
         redoList: state.redoList,
-      };
+      }
     default:
-      return state;
+      return state
   }
-};
+}

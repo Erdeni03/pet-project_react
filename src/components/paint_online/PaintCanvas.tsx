@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
-import { useActions } from '../../hooks/useActions';
-import Brush from './tools/Brush';
-import CustomModal from '../UI/CustomModal';
-import TextField from '@material-ui/core/TextField';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import { useTypedSelector } from '../../hooks/useTypedSelector'
+import { useActions } from '../../hooks/useActions'
+import Brush from './tools/Brush'
+import CustomModal from '../UI/CustomModal'
+import TextField from '@material-ui/core/TextField'
+import { useParams } from 'react-router-dom'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -38,18 +38,18 @@ const useStyles = makeStyles((theme: Theme) =>
       boxShadow: '1px 1px 10px',
     },
   })
-);
+)
 
 const PaintCanvas = () => {
-  const classes = useStyles();
+  const classes = useStyles()
 
-  const [open, setOpen] = useState(true);
-  const userInputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
+  const [open, setOpen] = useState(true)
+  const userInputRef = useRef() as React.MutableRefObject<HTMLInputElement>
 
-  const params = useParams<{ id: string }>();
+  const params = useParams<{ id: string }>()
 
-  const canvasRef = React.useRef() as React.MutableRefObject<HTMLCanvasElement>;
-  const { userName } = useTypedSelector((state) => state.paintCanvas);
+  const canvasRef = React.useRef() as React.MutableRefObject<HTMLCanvasElement>
+  const { userName } = useTypedSelector((state) => state.paintCanvas)
   const {
     setCanvas,
     setTool,
@@ -58,20 +58,20 @@ const PaintCanvas = () => {
     setUsername,
     setSocket,
     setSessionId,
-  } = useActions();
+  } = useActions()
 
   useEffect(() => {
-    setCanvas(canvasRef.current);
-    setCtx(canvasRef.current.getContext('2d'));
+    setCanvas(canvasRef.current)
+    setCtx(canvasRef.current.getContext('2d'))
     // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     if (userName) {
-      const socket = new WebSocket(`ws://localhost:5000/`);
-      setSocket(socket);
-      setSessionId(params.id);
-      setTool(new Brush(canvasRef.current, socket, params.id));
+      const socket = new WebSocket(`ws://localhost:5000/`)
+      setSocket(socket)
+      setSessionId(params.id)
+      setTool(new Brush(canvasRef.current, socket, params.id))
       socket.onopen = () => {
         socket.send(
           JSON.stringify({
@@ -79,48 +79,48 @@ const PaintCanvas = () => {
             username: userName,
             method: 'connection',
           })
-        );
-      };
+        )
+      }
       socket.onmessage = (e) => {
-        const msg = JSON.parse(e.data);
+        const msg = JSON.parse(e.data)
         switch (msg.method) {
           case 'connection':
-            console.log(`пользователь ${msg.username} присоединился`);
-            break;
+            console.log(`пользователь ${msg.username} присоединился`)
+            break
           case 'draw':
             // eslint-disable-next-line @typescript-eslint/no-use-before-define
-            drawHandler(msg);
-            break;
+            drawHandler(msg)
+            break
         }
-      };
+      }
     }
     // eslint-disable-next-line
   }, [userName]);
 
   const drawHandler = (msg: any) => {
-    const figure = msg.figure;
-    const ctx = canvasRef.current.getContext('2d');
+    const figure = msg.figure
+    const ctx = canvasRef.current.getContext('2d')
     switch (figure.type) {
       case 'brush':
-        Brush.draw(ctx, figure.x, figure.y);
-        break;
+        Brush.draw(ctx, figure.x, figure.y)
+        break
       case 'finish':
         if (ctx) {
-          ctx.beginPath();
+          ctx.beginPath()
         }
 
-        break;
+        break
     }
-  };
+  }
 
   const mouseDownHandler = () => {
-    pushUndo(canvasRef.current.toDataURL());
-  };
+    pushUndo(canvasRef.current.toDataURL())
+  }
   const connectHandler = () => {
-    setUsername(userInputRef.current.value);
+    setUsername(userInputRef.current.value)
 
-    setOpen(false);
-  };
+    setOpen(false)
+  }
   return (
     <>
       <CustomModal
@@ -149,7 +149,7 @@ const PaintCanvas = () => {
         />
       </div>
     </>
-  );
-};
+  )
+}
 
-export default PaintCanvas;
+export default PaintCanvas

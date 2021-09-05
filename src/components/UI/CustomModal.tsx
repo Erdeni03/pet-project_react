@@ -1,19 +1,19 @@
-import React from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import React from 'react'
+import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface CustomModalProps<T> {
-  open: boolean;
-  label: string;
-  setOpen: (d: boolean) => void;
+  open: boolean
+  label: string
+  setOpen: (d: boolean) => void
 
   // eslint-disable-next-line
   actionBtn: () => void;
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export default function CustomModal<T>({
@@ -24,8 +24,8 @@ export default function CustomModal<T>({
   children,
 }: CustomModalProps<T>) {
   const handleClose = () => {
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
   return (
     <div>
@@ -46,5 +46,5 @@ export default function CustomModal<T>({
         </DialogActions>
       </Dialog>
     </div>
-  );
+  )
 }
