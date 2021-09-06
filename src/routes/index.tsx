@@ -10,7 +10,25 @@ import BrushIcon from '@material-ui/icons/Brush'
 import Login from '../pages/Login'
 import Registration from '../pages/Registration'
 import Home from '../pages/Home'
+import Profile from '../pages/Profile'
+import Settings from '../pages/Settings'
 
+export const adminRoutes = [
+  {
+    url: '/admin/profile',
+    label: 'Профиль',
+    icon: null,
+    component: <Profile />,
+    visibility: true,
+  },
+  {
+    url: '/admin/settings',
+    label: 'Настройки',
+    icon: null,
+    component: <Settings />,
+    visibility: true,
+  },
+]
 export const dashBoardRoutes = [
   {
     url: '/',
@@ -18,14 +36,31 @@ export const dashBoardRoutes = [
     icon: null,
     component: <Home />,
     visibility: false,
+    isAdmin: false,
   },
-
+  {
+    url: '/admin/settings',
+    label: 'Настройки',
+    icon: null,
+    component: <Settings />,
+    visibility: true,
+    isAdmin: true,
+  },
+  {
+    url: '/admin/profile',
+    label: 'Profile',
+    icon: null,
+    component: <Profile />,
+    visibility: true,
+    isAdmin: true,
+  },
   {
     url: '/counter',
     label: 'Счетчик',
     icon: <AddCircleOutlineIcon />,
     component: <Counter />,
     visibility: true,
+    isAdmin: false,
   },
   {
     url: '/posts',
@@ -33,6 +68,7 @@ export const dashBoardRoutes = [
     icon: <ListAltIcon />,
     component: <Posts />,
     visibility: true,
+    isAdmin: false,
   },
   {
     url: '/users',
@@ -40,6 +76,7 @@ export const dashBoardRoutes = [
     icon: <ListAltIcon />,
     component: <Users />,
     visibility: true,
+    isAdmin: false,
   },
   {
     url: '/paint-online/:id',
@@ -47,6 +84,7 @@ export const dashBoardRoutes = [
     icon: <BrushIcon />,
     component: <PaintOnline />,
     visibility: true,
+    isAdmin: false,
   },
 ]
 

@@ -20,12 +20,16 @@ type AllProps = StoreProps & typeof mapDispatchToProps
 
 const App = ({ initialUser, currentUser, loading }: AllProps) => {
   useEffect(() => {
-    const auth = getAuth()
-    onAuthStateChanged(auth, (user) => {
-      initialUser(user)
-    })
+    setUserWithFirebase()
     // eslint-disable-next-line
   }, [])
+
+  const setUserWithFirebase = async () => {
+    const auth = getAuth()
+    await onAuthStateChanged(auth, (user) => {
+      initialUser(user)
+    })
+  }
 
   if (loading) {
     return <CustomLoader />

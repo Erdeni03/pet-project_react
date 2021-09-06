@@ -28,6 +28,7 @@ import {
   ListItemText,
   Link as MaterialLink,
   Avatar,
+  Tooltip,
 } from '@material-ui/core'
 import {
   Link,
@@ -38,7 +39,7 @@ import {
   Redirect,
   useLocation,
 } from 'react-router-dom'
-import { dashBoardRoutes } from '../routes'
+import { adminRoutes, dashBoardRoutes } from '../routes'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
 import '../App.css'
@@ -149,12 +150,12 @@ export default function Main() {
   const classes = useStyles()
   const [open, setOpen] = useState<boolean>(true)
   const [label, setLabel] = useState<string>('')
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(false)
+
   const history = useHistory()
   const location = useLocation()
   const { setAlert } = useActions()
   const { currentUser } = useTypedSelector((state) => state.auth)
-  console.log(location, 'locationlocationlocation')
-  console.log(history, 'historyhistoryhistoryhistory')
 
   useEffect(() => {
     dashBoardRoutes.forEach((route) => {
@@ -164,18 +165,30 @@ export default function Main() {
     })
   })
 
-  const handleDrawerOpen = () => {
-    setOpen(true)
+  useEffect(() => {
+    if (!localStorage.getItem('admin')) {
+      localStorage.setItem('admin', JSON.stringify(isAdmin))
+    }
+    setIsAdmin(JSON.parse(localStorage.getItem('admin') as string))
+  }, [])
+
+  const swapRouteToAdmin = () => {
+    localStorage.setItem('admin', JSON.stringify(true))
+
+    setIsAdmin(JSON.parse(localStorage.getItem('admin') as string))
+    history.push('/admin/profile')
   }
-  const handleDrawerClose = () => {
-    setOpen(false)
+  const handleGoHome = () => {
+    setIsAdmin(false)
+
+    localStorage.setItem('admin', JSON.stringify(false))
+    history.push('/')
   }
 
   const handleLogout = () => {
     const auth = getAuth()
     signOut(auth)
       .then(() => {
-        console.log('sdsdsd')
         setAlert({
           isOpen: true,
           text: 'Bye bye!!',
@@ -208,7 +221,7 @@ export default function Main() {
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            onClick={() => setOpen(true)}
             className={clsx(
               classes.menuButton,
               open && classes.menuButtonHidden
@@ -225,6 +238,7 @@ export default function Main() {
           >
             <NavLink to="/" style={{ textDecoration: 'none', color: 'white' }}>
               <HomeIcon
+                onClick={handleGoHome}
                 fontSize={'large'}
                 style={{
                   fontSize: '2.7rem',
@@ -243,21 +257,28 @@ export default function Main() {
           >
             {label}
           </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-
-          <IconButton color="inherit">
-            <Brightness4Icon />
-          </IconButton>
+          <Tooltip title="Пока это не работает!" aria-label="add">
+            <IconButton color="inherit">
+              <Badge badgeContent={4} color="secondary">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Пока это не работает!" aria-label="add">
+            <IconButton color="inherit">
+              <Brightness4Icon />
+            </IconButton>
+          </Tooltip>
           <Divider
             orientation={'vertical'}
             flexItem={true}
             style={{ width: 1, background: 'white' }}
           />
-          <IconButton color="inherit" style={{ marginLeft: 10 }}>
+          <IconButton
+            onClick={swapRouteToAdmin}
+            color="inherit"
+            style={{ marginLeft: 10 }}
+          >
             {currentUser?.displayName}
             <Avatar alt="User" style={{ marginLeft: 5 }}>
               {/* {currentUser?.photoUrl} */}
@@ -284,27 +305,45 @@ export default function Main() {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
+          <IconButton onClick={() => setOpen(false)}>
             <ChevronLeftIcon />
           </IconButton>
         </div>
         <Divider />
         <List>
-          {dashBoardRoutes.map((route) => {
-            return (
-              route.visibility && (
-                <ListItem
-                  key={route.url}
-                  button
-                  component={Link}
-                  to={route.url}
-                >
-                  <ListItemIcon>{route.icon}</ListItemIcon>
-                  <ListItemText primary={route.label} />
-                </ListItem>
-              )
-            )
-          })}
+          {isAdmin
+            ? dashBoardRoutes.map((route) => {
+                return (
+                  route.visibility &&
+                  route.isAdmin && (
+                    <ListItem
+                      key={route.url}
+                      button
+                      component={Link}
+                      to={route.url}
+                    >
+                      <ListItemIcon>{route.icon}</ListItemIcon>
+                      <ListItemText primary={route.label} />
+                    </ListItem>
+                  )
+                )
+              })
+            : dashBoardRoutes.map((route) => {
+                return (
+                  route.visibility &&
+                  !route.isAdmin && (
+                    <ListItem
+                      key={route.url}
+                      button
+                      component={Link}
+                      to={route.url}
+                    >
+                      <ListItemIcon>{route.icon}</ListItemIcon>
+                      <ListItemText primary={route.label} />
+                    </ListItem>
+                  )
+                )
+              })}
         </List>
         <Divider />
         {/* <List>aaaaa</List> */}

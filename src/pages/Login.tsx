@@ -105,11 +105,8 @@ const Login = ({ setAuth, setAlert }: Props) => {
 
         setAuth()
         history.push('/')
-        console.log(user, 'user')
       })
       .catch((error) => {
-        console.log(error)
-
         if (error.code === 'auth/user-not-found') {
           setAlert({
             isOpen: true,
@@ -125,12 +122,6 @@ const Login = ({ setAuth, setAlert }: Props) => {
           })
         }
       })
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log(user, 'useruseruseruseruseruseruseruseruseruser2')
-      }
-    })
   }
 
   return (
