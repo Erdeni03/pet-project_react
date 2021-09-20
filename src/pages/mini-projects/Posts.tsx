@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
-import { getPosts } from '../api/posts'
-import { IPosts } from '../types/types'
+import { getPosts } from '../../api/posts'
+
 import {
   Box,
   FormControl,
@@ -14,10 +14,11 @@ import {
 import SearchIcon from '@material-ui/icons/Search'
 import Alert from '@material-ui/lab/Alert'
 import AddIcon from '@material-ui/icons/Add'
-import CustomList from '../components/CustomList'
-import PostItem from '../components/PostItem'
-import CustomModal from '../components/UI/CustomModal'
+import CustomList from '../../components/CustomList'
+import PostItem from '../../components/PostItem'
+import CustomModal from '../../components/UI/CustomModal'
 import TextField from '@material-ui/core/TextField'
+import { IPosts } from '../../helpers/types/types'
 
 const useStyles = makeStyles({
   root: {

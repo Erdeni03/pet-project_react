@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
-import { useTypedSelector } from '../hooks/useTypedSelector'
+import { useTypedSelector } from '../../helpers/hooks/useTypedSelector'
 // import {fetchUsers} from "../store/action-creators/users";
-import { useActions } from '../hooks/useActions'
+import { useActions } from '../../helpers/hooks/useActions'
 
 const Users: React.FC = () => {
   const { users, loading, error } = useTypedSelector((state) => state.user)
@@ -9,7 +9,7 @@ const Users: React.FC = () => {
   useEffect(() => {
     fetchUsers()
     // eslint-disable-next-line
-    }, [])
+  }, [])
 
   if (loading) {
     return <h2>Идет загрузка...</h2>

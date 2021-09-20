@@ -5,8 +5,8 @@ const Home = () => {
     <>
       <img
         style={{ objectFit: 'cover', height: '100%', width: '100%' }}
-        src="/How-to-Learn-Programming.png"
-        alt="sdssds"
+        src="/react-projects.jpg"
+        alt="react-projects"
       />
     </>
   )

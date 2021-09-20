@@ -1,6 +1,6 @@
 import React from 'react'
-import PaintToolbar from '../components/paint_online/PaintToolbar'
-import PaintCanvas from '../components/paint_online/PaintCanvas'
+import PaintToolbar from '../../components/paint_online/PaintToolbar'
+import PaintCanvas from '../../components/paint_online/PaintCanvas'
 
 const PaintOnline = () => {
   return (

@@ -14,14 +14,10 @@ import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import { connect } from 'react-redux'
 
-import { RootState } from '../store/reducers'
-import { disableAuth, setAuth } from '../store/action-creators/auth'
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-} from 'firebase/auth'
-import { setAlert } from '../store/action-creators/alert'
+import { RootState } from '../../store/reducers'
+import { disableAuth, setAuth } from '../../store/action-creators/auth'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import { setAlert } from '../../store/action-creators/alert'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { useHistory, Link } from 'react-router-dom'
@@ -94,9 +90,7 @@ const Login = ({ setAuth, setAlert }: Props) => {
     const auth = getAuth()
 
     signInWithEmailAndPassword(auth, values.email, values.password)
-      .then((userCredential) => {
-        const user = userCredential
-
+      .then(() => {
         setAlert({
           isOpen: true,
           text: 'Вход в систему успешно пройден!!',

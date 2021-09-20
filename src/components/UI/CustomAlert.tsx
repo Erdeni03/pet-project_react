@@ -24,11 +24,11 @@ const CustomAlert = ({
 }: Props) => {
   return (
     <Snackbar
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       autoHideDuration={autoHideTime}
       open={isOpen}
       onClose={() => hideAlert()}
-      key={'top' + 'right'}
+      key={'top' + 'center'}
     >
       <Alert onClose={() => hideAlert()} severity={variant}>
         {text}

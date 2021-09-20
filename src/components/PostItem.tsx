@@ -5,7 +5,7 @@ import CardActions from '@material-ui/core/CardActions'
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
 import { makeStyles } from '@material-ui/core/styles'
-import { IPosts } from '../types/types'
+import { IPosts } from '../helpers/types/types'
 
 const useStyles = makeStyles({
   root: {
