@@ -42,5 +42,6 @@
         "accessor-pairs": "off",
         "semi": ["error", "never"],
         "prettier/prettier": "off"
+
     }
 }

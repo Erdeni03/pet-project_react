@@ -2,7 +2,7 @@ import {
   UserAction,
   UserActionTypes,
   UserState,
-} from '../../types/storeTypes/user'
+} from '../../helpers/types/storeTypes/user'
 
 const initialState: UserState = {
   users: [],

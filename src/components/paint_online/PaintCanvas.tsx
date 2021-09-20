@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { useTypedSelector } from '../../hooks/useTypedSelector'
-import { useActions } from '../../hooks/useActions'
+import { useTypedSelector } from '../../helpers/hooks/useTypedSelector'
+import { useActions } from '../../helpers/hooks/useActions'
 import Brush from './tools/Brush'
 import CustomModal from '../UI/CustomModal'
 import TextField from '@material-ui/core/TextField'
@@ -64,7 +64,7 @@ const PaintCanvas = () => {
     setCanvas(canvasRef.current)
     setCtx(canvasRef.current.getContext('2d'))
     // eslint-disable-next-line
-  }, []);
+  }, [])
 
   useEffect(() => {
     if (userName) {
@@ -95,7 +95,7 @@ const PaintCanvas = () => {
       }
     }
     // eslint-disable-next-line
-  }, [userName]);
+  }, [userName])
 
   const drawHandler = (msg: any) => {
     const figure = msg.figure

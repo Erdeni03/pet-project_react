@@ -20,6 +20,8 @@ import {
   updateProfile,
 } from 'firebase/auth'
 
+import { useActions } from '../../helpers/hooks/useActions'
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -44,7 +46,7 @@ const Registration = () => {
   const classes = useStyles()
 
   const history = useHistory()
-
+  const { initialUser } = useActions()
   const validationSchema = yup.object({
     displayName: yup
       .string()
@@ -73,36 +75,52 @@ const Registration = () => {
       confirmPassword: '',
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      createUserWithFirebase(values)
+    onSubmit: async (values) => {
+      await createUserWithFirebase(values)
     },
   })
 
-  const createUserWithFirebase = (values: {
+  const createUserWithFirebase = async (values: {
     displayName: string
     email: string
     password: string
     confirmPassword: string
   }) => {
-    const auth = getAuth()
-    createUserWithEmailAndPassword(auth, values.email, values.password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user
-        // @ts-ignore
-        updateProfile(user, {
-          displayName: values.displayName,
-          photoURL: '/avatar-default.png',
-        })
-        history.push('/')
+    try {
+      const auth = getAuth()
+      const data = await createUserWithEmailAndPassword(
+        auth,
+        values.email,
+        values.password
+      )
+
+      await updateProfile(data.user, {
+        displayName: values.displayName,
+        photoURL: '/avatar-default.png',
       })
-      .catch((error) => {
-        const errorCode = error.code
-        console.log(errorCode, 'errorCodeerrorCode')
-        const errorMessage = error.message
-        console.log(errorMessage, 'errorMessageerrorMessage')
-        // ..
-      })
+      initialUser(data.user)
+      history.push('/')
+    } catch (e) {}
+
+    // createUserWithEmailAndPassword(auth, values.email, values.password)
+    //   .then((userCredential) => {
+    //     // Signed in
+    //     const user = userCredential.user
+    //     // @ts-ignore
+    //     updateProfile(user, {
+    //       displayName: values.displayName,
+    //       photoURL: '/avatar-default.png',
+    //     })
+    //
+    //   })
+    //   .catch((error) => {
+    //     const errorCode = error.code
+    //     console.log(errorCode, 'errorCodeerrorCode')
+    //     const errorMessage = error.message
+    //     console.log(errorMessage, 'errorMessageerrorMessage')
+    //     // ..
+    //   })
+    // })
   }
 
   return (
